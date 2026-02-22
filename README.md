@@ -41,6 +41,10 @@ The app runs at **http://localhost:5173**.
   - In the admin export section, enter the same key and click **Download Excel**.
 - If `EXPORT_SECRET` is not set (e.g. local development), the export works without a key so you can test easily.
 
+## Deploy to the live web
+
+To run the app on the internet (not just on your machine), see **[DEPLOYMENT.md](./DEPLOYMENT.md)**. It walks you through deploying the backend (e.g. Railway) and frontend (e.g. Vercel) with free tiers.
+
 ## API
 
 - **POST** `/send-message`  

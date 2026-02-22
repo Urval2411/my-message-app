@@ -3,9 +3,11 @@ const cors = require('cors');
 const XLSX = require('xlsx');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// In production, set FRONTEND_URL (e.g. https://your-app.vercel.app) to restrict CORS
+const corsOrigin = process.env.FRONTEND_URL || true;
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
 
 const MAX_MESSAGE_LENGTH = 200;
@@ -86,5 +88,5 @@ app.get('/messages/export', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server is now running and listening on port ${PORT}`);   
 });

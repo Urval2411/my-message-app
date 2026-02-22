@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 const MAX_MESSAGE_LENGTH = 200;
-const API_URL = '/api';
+// In production, set VITE_API_URL to your backend URL (e.g. https://your-app.railway.app)
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export default function App() {
   const [name, setName] = useState('');
