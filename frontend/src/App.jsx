@@ -5,8 +5,10 @@ const MAX_MESSAGE_LENGTH = 200;
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Profile from LinkedIn: https://www.linkedin.com/in/urval-shah-792b13119/
+// Add your photo as frontend/public/photo.jpg (or set photoUrl to any image URL)
 const PROFILE = {
   name: 'Urval Shah',
+  photoUrl: '/photo.jpg',
   headline: 'Columbia Business School · Oliver Wyman · Nomura · BITS Pilani',
   location: 'New York, NY',
   bio: '7+ years in strategy, consulting & investment banking. MBA from Columbia Business School (Dean\'s List). Senior Consultant at Oliver Wyman. Interested in connecting — send me an initial message below.',
@@ -37,6 +39,7 @@ export default function App() {
   const [exportKey, setExportKey] = useState('');
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState(null);
+  const [photoError, setPhotoError] = useState(false);
 
   const handleMessageChange = (e) => {
     const value = e.target.value;
@@ -104,67 +107,101 @@ export default function App() {
     }
   };
 
+  const showPhoto = PROFILE.photoUrl && !photoError;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4 py-10">
-      <div className="w-full max-w-lg">
-        {/* Profile hero */}
-        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 p-8 border border-slate-100 mb-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+    <div className="min-h-screen bg-pattern flex items-center justify-center p-4 py-12">
+      <div className="w-full max-w-xl space-y-6">
+        {/* Profile hero - dark band + photo + content */}
+        <div
+          className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] overflow-hidden border border-slate-200/80 opacity-0 animate-fade-in-up"
+          style={{ animationFillMode: 'forwards' }}
+        >
+          {/* Dark hero strip */}
+          <div className="relative bg-gradient-to-br from-slate-800 via-slate-800 to-slate-900 px-6 sm:px-10 pt-10 pb-14">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(13,148,136,0.25),transparent)]" aria-hidden />
+            <div className="relative flex flex-col items-center text-center">
+              <div className="relative animate-float">
+                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/90">
+                  {showPhoto ? (
+                    <img
+                      src={PROFILE.photoUrl}
+                      alt={PROFILE.name}
+                      className="w-full h-full object-cover"
+                      onError={() => setPhotoError(true)}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center text-white text-2xl sm:text-3xl font-display font-bold tracking-tight">
+                      {PROFILE.name.split(' ').map((n) => n[0]).join('')}
+                    </div>
+                  )}
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 rounded-full bg-accent ring-2 ring-slate-800" aria-hidden />
+              </div>
+              <h1 className="font-display font-bold text-2xl sm:text-3xl text-white mt-4 tracking-tight">
                 {PROFILE.name}
               </h1>
-              <p className="text-slate-500 text-sm mt-1 font-medium">
+              <p className="text-slate-300 text-sm mt-1 max-w-md">
                 {PROFILE.headline}
               </p>
-              <p className="text-slate-400 text-sm mt-0.5 flex items-center gap-1.5">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden />
+              <p className="text-slate-400 text-sm mt-1 flex items-center gap-1.5 justify-center">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent" aria-hidden />
                 {PROFILE.location}
               </p>
+              <a
+                href={PROFILE.linkedInUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0A66C2] text-white text-sm font-medium hover:bg-[#004182] transition shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                aria-label="LinkedIn profile"
+              >
+                <LinkedInIcon className="w-5 h-5" />
+                Connect on LinkedIn
+              </a>
             </div>
-            <a
-              href={PROFILE.linkedInUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0A66C2] text-white text-sm font-medium hover:bg-[#004182] transition shadow-sm"
-              aria-label="LinkedIn profile"
-            >
-              <LinkedInIcon className="w-5 h-5" />
-              LinkedIn
-            </a>
           </div>
-          <p className="text-slate-600 text-sm leading-relaxed mt-5">
-            {PROFILE.bio}
-          </p>
-          {PROFILE.roles?.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {PROFILE.roles.map((role, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
-                >
-                  {role}
-                </span>
-              ))}
-            </div>
-          )}
+
+          <div className="p-6 sm:p-8 relative -mt-6 sm:-mt-8 mx-3 sm:mx-4 bg-white rounded-2xl shadow-lg border border-slate-100">
+            <p className="text-slate-600 text-sm leading-relaxed">
+              {PROFILE.bio}
+            </p>
+            {PROFILE.roles?.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {PROFILE.roles.map((role, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-accent-light text-accent-hover border border-accent/20"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Contact form */}
-        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 p-8 border border-slate-100">
-          <h2 className="text-lg font-semibold text-slate-800 mb-1">
-            Send an initial message
-          </h2>
-          <p className="text-slate-500 text-sm mb-6">
-            I&apos;ll get back to you soon.
-          </p>
+        {/* Contact form card */}
+        <div
+          className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-6 sm:p-8 border border-slate-200/80 opacity-0 animate-fade-in-up"
+          style={{ animationDelay: '120ms', animationFillMode: 'forwards' }}
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <span className="flex h-10 w-10 rounded-xl bg-accent/10 items-center justify-center text-accent font-display font-bold text-lg">
+              →
+            </span>
+            <div>
+              <h2 className="font-display font-bold text-xl text-slate-900">
+                Send a message
+              </h2>
+              <p className="text-slate-500 text-sm">
+                I&apos;ll get back to you soon.
+              </p>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
-              >
+              <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1.5">
                 Name
               </label>
               <input
@@ -174,15 +211,11 @@ export default function App() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Your name"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-transparent transition"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition"
               />
             </div>
-
             <div>
-              <label
-                htmlFor="contact"
-                className="block text-sm font-medium text-slate-700 mb-1.5"
-              >
+              <label htmlFor="contact" className="block text-sm font-medium text-slate-700 mb-1.5">
                 Contact
               </label>
               <input
@@ -192,21 +225,15 @@ export default function App() {
                 onChange={(e) => setContact(e.target.value)}
                 required
                 placeholder="Email or phone"
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-transparent transition"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition"
               />
             </div>
-
             <div>
               <div className="flex justify-between mb-1.5">
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-slate-700"
-                >
+                <label htmlFor="message" className="block text-sm font-medium text-slate-700">
                   Message
                 </label>
-                <span className="text-xs text-slate-400">
-                  {message.length}/{MAX_MESSAGE_LENGTH}
-                </span>
+                <span className="text-xs text-slate-400">{message.length}/{MAX_MESSAGE_LENGTH}</span>
               </div>
               <textarea
                 id="message"
@@ -216,24 +243,18 @@ export default function App() {
                 maxLength={MAX_MESSAGE_LENGTH}
                 rows={4}
                 placeholder="Your message..."
-                className="w-full px-4 py-2.5 rounded-lg border border-slate-200 bg-slate-50/50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-transparent transition resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition resize-none"
               />
             </div>
-
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
-                {error}
-              </p>
+              <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-xl">{error}</p>
             )}
             {status && (
-              <p className="text-sm text-emerald-600 bg-emerald-50 px-3 py-2 rounded-lg">
-                {status}
-              </p>
+              <p className="text-sm text-accent-hover bg-accent-light px-3 py-2 rounded-xl">{status}</p>
             )}
-
             <button
               type="submit"
-              className="w-full py-3 rounded-lg bg-slate-800 text-white font-medium hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition"
+              className="w-full py-3.5 rounded-xl bg-accent hover:bg-accent-hover text-white font-semibold focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 transition shadow-md hover:shadow-lg"
             >
               Send message
             </button>
@@ -250,7 +271,7 @@ export default function App() {
             {showExport && (
               <form
                 onSubmit={handleExportExcel}
-                className="mt-4 p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-3"
+                className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3"
               >
                 <label className="block text-left text-sm font-medium text-slate-600">
                   Export key
@@ -260,7 +281,7 @@ export default function App() {
                   value={exportKey}
                   onChange={(e) => setExportKey(e.target.value)}
                   placeholder="Enter your export key"
-                  className="w-full px-3 py-2 rounded-lg border border-slate-200 text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-200 text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-accent/40"
                   autoComplete="off"
                 />
                 {exportError && (
@@ -269,7 +290,7 @@ export default function App() {
                 <button
                   type="submit"
                   disabled={exporting}
-                  className="w-full py-2 rounded-lg bg-slate-700 text-white text-sm font-medium hover:bg-slate-600 disabled:opacity-50"
+                  className="w-full py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-medium disabled:opacity-50"
                 >
                   {exporting ? 'Exporting…' : 'Download Excel'}
                 </button>

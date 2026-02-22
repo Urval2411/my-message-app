@@ -5,6 +5,18 @@ export default {
     extend: {
       fontFamily: {
         sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        display: ['Syne', 'DM Sans', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        accent: { DEFAULT: '#0d9488', hover: '#0f766e', light: '#ccfbf1' },
+      },
+      keyframes: {
+        'fade-in-up': { '0%': { opacity: '0', transform: 'translateY(12px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+        'float': { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-4px)' } },
+      },
+      animation: {
+        'fade-in-up': 'fade-in-up 0.5s ease-out both',
+        'float': 'float 4s ease-in-out infinite',
       },
     },
   },
