@@ -18,12 +18,9 @@ This guide gets your app running on the internet: **backend** on Railway and **f
 
 2. **New project**: Click **“New Project”** → **“Deploy from GitHub repo”**. Connect GitHub if needed, then select your message-app repo.
 
-3. **Use only the backend folder**:
-   - Railway may detect the repo root. We need to run only the `backend` folder.
-   - In the project, open **Settings** (or the service settings).
-   - Set **Root Directory** to `backend` (or the path to your backend folder in the repo).
-   - Set **Build Command** to: `npm install` (or leave empty if it runs automatically).
-   - Set **Start Command** to: `npm start` or `node server.js`.
+3. **Backend runs from repo root** (no need to set Root Directory):
+   - A root **package.json** is included so Railway detects Node and runs the backend: it runs `npm install` (which installs backend dependencies) and `npm start` (which starts the backend server).
+   - **If the build still fails** (e.g. “Railpack could not determine how to build”): in Railway → your service → **Settings** → **Source**, set **Root Directory** to `backend`. Then set **Start Command** to `npm start` or `node server.js` and redeploy.
 
 4. **Environment variables** (in Railway → your service → **Variables**):
    - `EXPORT_SECRET` = a long random string only you know (e.g. `MyStr0ng_Export_Key_2025`). **Required** so only you can download the Excel file.
