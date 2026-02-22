@@ -1,0 +1,12 @@
+{
+  "name": "message-app",
+  "private": true,
+  "description": "Message app monorepo (backend + frontend)",
+  "scripts": {
+    "install": "cd backend && npm install",
+    "start": "cd backend && node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
